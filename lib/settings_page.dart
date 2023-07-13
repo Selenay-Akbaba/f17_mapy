@@ -1,31 +1,32 @@
-import 'package:ayarlar/localeString.dart';
+import 'package:mapy/localeString.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-/*void main() {
+void main() {
   runApp(MyApp());
 }
-*/
-/*class MyApp extends StatelessWidget {
+
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       translations: LocalString(),
-      locale: Locale('en', 'US'),
+      locale: Get.locale == null ? LocalString.varsayilan : Get.locale,
+      fallbackLocale: Locale('tr', 'TR'),
       debugShowCheckedModeBanner: false,
       home: MyHomePage(),
     );
   }
-}*/
-
-class SettingsPage extends StatefulWidget {
-  @override
-  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
-  final List locale = [
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final List<Map<String, dynamic>> locale = [
     {'isim': 'Türkçe', 'locale': Locale('tr', 'TR')},
     {'isim': 'English', 'locale': Locale('en', 'US')}
   ];
@@ -38,9 +39,9 @@ class _SettingsPageState extends State<SettingsPage> {
   builddialog(BuildContext context) {
     showDialog(
         context: context,
-        builder: (builder) {
+        builder: (context) {
           return AlertDialog(
-            title: Text("Dil Seçiniz".tr),
+            title: Text("dil sec".tr),
             content: Container(
               width: double.maxFinite,
               child: ListView.separated(
@@ -50,7 +51,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                           onTap: () {
-                            updatelanguage(locale[index]['locale']);
+                            Get.updateLocale(locale[index]['locale']);
+                            Get.back();
                           },
                           child: Text(locale[index]['isim'])),
                     );
@@ -79,7 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
         theme: _switch ? _dark : _light,
         home: Scaffold(
           appBar: AppBar(
-            title: Text("Ayarlar".tr, style: TextStyle(fontSize: 22)),
+            title: Text("ayarlar".tr, style: TextStyle(fontSize: 22)),
             leading: IconButton(
               onPressed: () {},
               icon: Icon(
@@ -101,7 +103,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      "Hesap".tr,
+                      "hesap".tr,
                       style:
                       TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     )
@@ -116,8 +118,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     onPressed: () {
                       builddialog(context);
                     },
-                    child: Text("Dil seçenekleri".tr)),
-                /*buildAccountOption(context, "Þifreyi deðiþtir"),
+                    child: Text("dil".tr)),
+
+                /*buildAccountOption(context, "Şifreyi değiştir"),
                 buildAccountOption(context, "Dil seçenekleri"),
                 buildAccountOption(context, "Gizlilik ve Güvenlik"),*/
                 SizedBox(height: 40),
@@ -128,19 +131,19 @@ class _SettingsPageState extends State<SettingsPage> {
                       color: Colors.blue,
                     ),
                     SizedBox(width: 10),
-                    Text("Bildirimler".tr,
+                    Text("bildirimler".tr,
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold))
                   ],
                 ),
                 Divider(height: 20, thickness: 1),
                 SizedBox(height: 10),
-                buildNoficationOption("Koyu Tema".tr, _switch, (_newvalue) {
+                buildNoficationOption("koyu tema".tr, _switch, (_newvalue) {
                   setState(() {
                     _switch = _newvalue;
                   });
                 }),
-                buildNoficationOption("Hesap Aktifliði".tr, _switch2,
+                buildNoficationOption("hesap aktifliği".tr, _switch2,
                         (_newvalue2) {
                       setState(() {
                         _switch2 = _newvalue2;
@@ -152,9 +155,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20))),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        backgroundColor: Colors.red),
                     onPressed: () {},
-                    child: Text("Çýkýþ Yap".tr,
+                    child: Text("çıkış yap".tr,
                         style: TextStyle(
                             fontSize: 16,
                             letterSpacing: 2.2,
